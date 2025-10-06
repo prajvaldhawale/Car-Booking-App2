@@ -1,6 +1,20 @@
-const app = require('./app');
-const config = require('./config/config');
+const path = require('path');
+const express = require('express');
+const app = express();
+const carRoutes = require('./routes/carRoutes');
 
-app.listen(config.PORT, () => {
-    console.log(`Server running on port ${config.PORT}`);
+// Middleware
+app.use(express.json());
+
+// Serve static files from the client directory
+app.use(express.static(path.join(__dirname, '../client')));
+
+// API routes
+app.use('/api', carRoutes);
+
+// Fallback route for SPA or direct root access
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/index.html'));
 });
+
+module.exports = app;
