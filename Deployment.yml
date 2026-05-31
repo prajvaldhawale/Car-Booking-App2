@@ -1,0 +1,51 @@
+---
+# -------------------------------
+# Deployment
+# -------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: car-book-nodejs-app
+  namespace: webapps
+  labels:
+    app: car-book-nodejs-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: car-book-nodejs-app
+  template:
+    metadata:
+      labels:
+        app: car-book-nodejs-app
+    spec:
+      containers:
+      - name: car-book-nodejs-container
+        image: node-carapp2:latest   # ✅ replace with your image
+        ports:
+        - containerPort: 3001
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+
+---
+# -------------------------------
+# Service (Expose app)
+# -------------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: car-book-nodejs-service
+  namespace: webapps
+spec:
+  selector:
+    app: car-book-nodejs-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3001
+  type: LoadBalancer
