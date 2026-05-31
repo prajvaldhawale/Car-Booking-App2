@@ -21,7 +21,8 @@ spec:
     spec:
       containers:
       - name: car-book-nodejs-container
-        image: node-carapp2:latest   # ✅ replace with your image
+        image: node-carapp2:latest
+        imagePullPolicy: Neve # ✅ replace with your image
         ports:
         - containerPort: 3001
         resources:
